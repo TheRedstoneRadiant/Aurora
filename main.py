@@ -8,4 +8,7 @@ async def on_ready():
     print(f"Logged in as {client.user}")
 
 if __name__ == "__main__":
-    client.run(token)
+    try:
+        client.run(token)
+    except discord.errors.HTTPException:
+        os.system("kill 1")  # reset repl ip address
