@@ -1,8 +1,16 @@
-import discord, os
+import discord, json
 from discord.ext import commands
 
+with open("config.json") as file:
+    config = json.load(file)
+
 token = os.environ["token"]
-client = commands.Bot(self_bot=True, command_prefix=",", case_insensitive=True)
+client = commands.Bot(
+    command_prefix=config["prefix"],
+    status=getattr(discord.Status, config["status"]),
+    self_bot=True,
+    case_insensitive=True
+)
 
 @client.event
 async def on_ready():
