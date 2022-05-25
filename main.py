@@ -9,6 +9,7 @@ async def on_ready():
 
 if __name__ == "__main__":
     try:
+        keep_alive()  # start replit webserver
         client.run(token)
     except discord.errors.HTTPException:
         os.system("kill 1")  # reset repl ip address
