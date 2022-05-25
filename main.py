@@ -1,7 +1,8 @@
 import discord, os
+from discord.ext import commands
 
 token = os.environ["token"]
-client = discord.Client(guild_subscription_options=discord.GuildSubscriptionOptions.off())
+client = commands.Bot(self_bot=True, command_prefix=",", case_insensitive=True)
 
 @client.event
 async def on_ready():
