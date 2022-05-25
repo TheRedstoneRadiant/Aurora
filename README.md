@@ -6,8 +6,6 @@
   <br>
 </h1>
 
-<h4 align="center">Aurora is a simple and configurable Discord selfbot</h4>
-
 <p align="center">
   <a href="https://github.com/TheRedstoneRadiant/Aurora/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blueviolet?logo=gitbook&logoColor=blueviolet">
@@ -16,3 +14,5 @@
       <img src="https://img.shields.io/github/stars/TheRedstoneRadiant/Aurora">
   </a>
 </p>
+
+<h4 align="center">Aurora is a simple and configurable Discord selfbot</h4>
