@@ -17,6 +17,27 @@ client = commands.Bot(
 async def on_ready():
     print(f"Logged in as {client.user}")
 
+@client.command()
+async def purge(ctx, amount=None):
+    if not amount:
+        return await ctx.message.edit("Usage: ,purge <amount>")
+
+    async for message in ctx.channel.history(limit=None):
+        if amount == 0:
+            return
+
+        if message.author == client.user:
+            try:
+                await message.delete()
+
+            except discord.errors.Forbidden:
+                continue
+
+            amount -= 1
+
+
+
+
 if __name__ == "__main__":
     start_webserver()  # start replit webserver
     try:
