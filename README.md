@@ -1,6 +1,8 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/TheRedstoneRadiant/Aurora"><img src="https://raw.githubusercontent.com/TheRedstoneRadiant/Aurora/main/assets/aurora.png" width=128 height=128 alt="logo"></a>
+  <a href="https://github.com/TheRedstoneRadiant/Aurora">
+    <img src="https://user-images.githubusercontent.com/76220359/170808177-ad80fadb-2f98-44ff-8417-ffe939881088.png" width=128 height=128 alt="logo">
+  </a>
   <br>
   Aurora
   <br>
