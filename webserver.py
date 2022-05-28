@@ -6,6 +6,6 @@ app = flask.Flask(__name__)
 def index():
     return "."
 
-def keep_alive():
+def start_webserver():
     partial_run = functools.partial(app.run, host="0.0.0.0", port=8080)
     threading.Thread(target=partial_run).start()

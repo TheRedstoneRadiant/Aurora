@@ -1,5 +1,6 @@
 import discord, json
 from discord.ext import commands
+from webserver import start_webserver
 
 with open("config.json") as file:
     config = json.load(file)
@@ -17,7 +18,7 @@ async def on_ready():
     print(f"Logged in as {client.user}")
 
 if __name__ == "__main__":
-    keep_alive()  # start replit webserver
+    start_webserver()  # start replit webserver
     try:
         client.run(token)
     except discord.errors.HTTPException:
