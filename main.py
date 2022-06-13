@@ -23,9 +23,6 @@ async def purge(ctx, amount=None):
         return await ctx.message.edit("Usage: ,purge <amount>")
 
     async for message in ctx.channel.history(limit=None):
-        if amount == 0:
-            return
-
         if message.author == client.user:
             try:
                 await message.delete()
@@ -35,6 +32,8 @@ async def purge(ctx, amount=None):
 
             amount -= 1
 
+        if amount == 0:
+            return
 
 
 
