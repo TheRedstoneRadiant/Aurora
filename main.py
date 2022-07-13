@@ -5,7 +5,7 @@ from webserver import start_webserver
 with open("config.json") as file:
     config = json.load(file)
 
-token = os.environ["token"]
+token = os.environ["DISCORD_TOKEN"]
 client = commands.Bot(
     command_prefix=config["prefix"],
     status=getattr(discord.Status, config["status"]),
