@@ -14,13 +14,16 @@ client = commands.Bot(
     guild_subscription_options=discord.GuildSubscriptionOptions.off(),
 )
 
-_cogs = ["cogs.vlc", "cogs.utility", "cogs.debug", "cogs.meme"]
+cogs = ["cogs.utility", "cogs.debug", "cogs.meme"]
+
+if os.environ["VLC_TOKEN"]:
+    cogs += "cogs.vlc"
 
 
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
-    for cog in _cogs:
+    for cog in cogs:
         try:
             client.load_extension(cog)
             print(f"Loaded '{cog}'")
