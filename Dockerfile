@@ -1,10 +1,5 @@
-FROM python:3.8-slim-buster
+FROM python:3.9
 
-WORKDIR /src
+RUN pip install --no-cache-dir -r src/requirements.txt
 
-COPY src/requirements.txt requirements.txt
-RUN pip3 install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD [ "python3", "main.py"]
+CMD [ "python", "src/main.py"]
