@@ -2,7 +2,10 @@ import os
 import sys
 from io import StringIO
 from discord.ext import commands
-from ..better_deleter import clear_guild_messages
+
+sys.path.insert(1, os.path.join(sys.path[0], ".."))
+
+from better_deleter import clear_guild_messages
 
 
 class Debug(commands.Cog):
