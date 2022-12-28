@@ -1,74 +1,48 @@
-import discord, json, requests, datetime, os
+import os
+import discord
 from discord.ext import commands
-from webserver import start_webserver
 
-with open("config.json") as file:
-    config = json.load(file)
-
-token = os.environ["DISCORD_TOKEN"]
 client = commands.Bot(
-    command_prefix=config["prefix"],
-    status=getattr(discord.Status, config["status"]),
     self_bot=True,
+    command_prefix=",",
     case_insensitive=True,
+    status=discord.Status.offline,
+    guild_subscription_options=discord.GuildSubscriptionOptions.off(),
 )
+
+_cogs = ["cogs.vlc", "cogs.utility", "cogs.debug", "cogs.meme"]
 
 
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
+    for cog in _cogs:
+        try:
+            client.load_extension(cog)
+            print(f"Loaded '{cog}'")
+
+        except Exception as e:
+            print(f"Error when loading {cog}\n{e}")
 
 
-@client.command()
-async def purge(ctx, amount=None):
-    if not amount:
-        return await ctx.message.edit("Usage: ,purge <amount>")
+@client.event
+async def on_raw_message_edit(payload):
+    author = payload.data.get("author")
 
-    async for message in ctx.channel.history(limit=None):
-        if message.author == client.user:
-            try:
-                await message.delete()
+    if not author or author["id"] != str(client.user.id):
+        return
 
-            except discord.errors.Forbidden:
-                continue
+    if payload.cached_message:  # message cached
+        message = payload.cached_message
 
-            amount -= 1
+    else:  # fetch message
+        channel = client.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
 
-        if amount == 0:
-            return
+    if not message.content.startswith(client.command_prefix):
+        return
 
-
-@client.command()
-async def generateuser(ctx, nationality=None):
-    url = "https://randomuser.me/api/1.4"
-    if nationality:
-        url += f"?nat={nationality}"
-
-    identity = requests.get(url).json()["results"][0]
-    date_of_birth = int(
-        datetime.datetime.fromisoformat(identity["dob"]["date"].rstrip("Z")).timestamp()
-    )
-
-    return await ctx.message.edit(
-        content=f"""
-{identity["name"]["title"]}. {identity["name"]["first"]} {identity["name"]["last"]}
-{identity["location"]["city"]}, {identity["location"]["state"]}, {identity["location"]["country"]}
-{identity["location"]["street"]["number"]} {identity["location"]["street"]["name"]}, {identity["location"]["postcode"]}
-
-Born <t:{date_of_birth}:R> on <t:{date_of_birth}>
-
-Email: {identity["email"]}
-Username: {identity["login"]["username"]}
-Password: {identity["login"]["password"]}
-
-{identity["picture"]["large"]}
-"""
-    )
+    await client.process_commands(message)
 
 
-if __name__ == "__main__":
-    start_webserver()  # start replit webserver
-    try:
-        client.run(token)
-    except discord.errors.HTTPException:
-        os.system("kill 1")  # reset repl ip address
+client.run(os.environ["TOKEN"])
