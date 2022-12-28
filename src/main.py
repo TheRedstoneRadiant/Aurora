@@ -13,8 +13,8 @@ client = commands.Bot(
 
 cogs = ["cogs.utility", "cogs.debug", "cogs.meme"]
 
-if os.environ["VLC_TOKEN"]:
-    cogs += "cogs.vlc"
+if os.environ.get("VLC_TOKEN"):
+    cogs.append("cogs.vlc")
 
 
 @client.event
