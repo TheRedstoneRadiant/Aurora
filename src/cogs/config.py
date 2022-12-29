@@ -1,4 +1,5 @@
 import json
+import discord
 from discord.ext import commands
 
 STATUS_OPTIONS = ("idle", "invisible", "online", "dnd")
@@ -19,6 +20,8 @@ class Config(commands.Cog):
         config = {"status": status}
         with open("config.json") as file:
             json.dump(config, file)
+
+        await self.client.change_presence(status=getattr(discord.Status, status))
 
 
 def setup(client):
