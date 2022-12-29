@@ -1,13 +1,23 @@
 import os
 import discord
+import json
 from discord.ext import commands
 
+BOT_PREFIX = ","
+BOT_STATUS = "idle"
+
+if "config.json" in os.listdir:
+    with open("config.json") as file:
+        config = json.load(file)
+
+    BOT_PREFIX = config.get("prefix", BOT_PREFIX)
+    BOT_STATUS = config.get("status", BOT_STATUS)
 
 client = commands.Bot(
     self_bot=True,
-    command_prefix=",",
+    command_prefix=BOT_PREFIX,
     case_insensitive=True,
-    status=getattr(discord.Status, "idle"),
+    status=getattr(discord.Status, BOT_STATUS),
     guild_subscription_options=discord.GuildSubscriptionOptions.off(),
 )
 
