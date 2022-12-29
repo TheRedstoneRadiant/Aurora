@@ -18,7 +18,7 @@ class Config(commands.Cog):
             )
 
         config = {"status": status}
-        with open("config.json") as file:
+        with open("config.json", "w") as file:
             json.dump(config, file)
 
         await self.client.change_presence(status=getattr(discord.Status, status))
