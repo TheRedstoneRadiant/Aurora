@@ -37,8 +37,8 @@ class Debug(commands.Cog):
         os.system("kill 1")
 
     @commands.command()
-    async def purgemessages(self, ctx, user_id=""):
-        if not user_id:
+    async def guildclear(self, ctx, user_id=None):
+        if user_id is None:
             user_id = self.client.user.id
 
         await ctx.message.edit(content="Clearing messages...")

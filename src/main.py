@@ -2,23 +2,23 @@ import os
 import sys
 import discord
 import json
+from utils.config import load_config
 from discord.ext import commands
 
-BOT_PREFIX = ","
-BOT_STATUS = "idle"
+config = load_config("config.json")
 
-if "config.json" in os.listdir():
-    with open("config.json") as file:
-        config = json.load(file)
+client.prefix_latest = config.get("prefix", ",")
 
-    BOT_PREFIX = config.get("prefix", BOT_PREFIX)
-    BOT_STATUS = config.get("status", BOT_STATUS)
+
+async def get_latest_prefix(bot, message):
+    return client.prefix_latest
+
 
 client = commands.Bot(
     self_bot=True,
-    command_prefix=BOT_PREFIX,
+    command_prefix=get_latest_prefix,
     case_insensitive=True,
-    status=getattr(discord.Status, BOT_STATUS),
+    status=getattr(discord.Status, config.get("status", "idle")),
     guild_subscription_options=discord.GuildSubscriptionOptions.off(),
 )
 

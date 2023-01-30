@@ -8,6 +8,7 @@ async def perform_request(method, endpoint, **args):
         r = requests.get(
             f"https://discord.com/api/v9/{endpoint}", headers=headers, **args
         )
+
     elif method == "DELETE":
         r = requests.delete(
             f"https://discord.com/api/v9/{endpoint}", headers=headers, **args
@@ -16,12 +17,14 @@ async def perform_request(method, endpoint, **args):
     try:
         response_json = r.json()
         response_json["status_code"] = r.status_code
+
     except json.decoder.JSONDecodeError:
         return
 
     if r.status_code == 429:  # ratelimit
         retry_after = response_json.get("retry_after")
         await asyncio.sleep(retry_after)
+
         return await perform_request(method, endpoint, **args)
 
     return response_json
