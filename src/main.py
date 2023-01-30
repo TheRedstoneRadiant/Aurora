@@ -1,4 +1,5 @@
 import os
+import sys
 import discord
 import json
 from discord.ext import commands
@@ -6,7 +7,7 @@ from discord.ext import commands
 BOT_PREFIX = ","
 BOT_STATUS = "idle"
 
-if "config.json" in os.listdir:
+if "config.json" in os.listdir():
     with open("config.json") as file:
         config = json.load(file)
 
@@ -21,7 +22,7 @@ client = commands.Bot(
     guild_subscription_options=discord.GuildSubscriptionOptions.off(),
 )
 
-cogs = ["cogs.utility", "cogs.debug", "cogs.meme"]
+cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config"]
 
 if os.environ.get("VLC_TOKEN"):
     cogs.append("cogs.vlc")
@@ -59,4 +60,13 @@ async def on_raw_message_edit(payload):
     await client.process_commands(message)
 
 
-client.run(os.environ["TOKEN"])
+try:
+    stdout = sys.stdout
+    f = open("log.txt", "w")
+    sys.stdout = f
+
+    client.run(os.environ["TOKEN"])
+
+finally:
+    sys.stdout = stdout
+    f.close()
