@@ -41,6 +41,10 @@ class Config(commands.Cog):
         # Update prefix
         self.client.prefix_latest = prefix
 
+    @commands.command()
+    async def neofetch(self, ctx):
+        return
+
 
 def setup(client):
     client.add_cog(Config(client))
