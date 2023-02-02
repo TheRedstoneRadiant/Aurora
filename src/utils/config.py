@@ -1,3 +1,6 @@
+import json
+
+
 def load_config(config_path: str) -> dict:
     # Load config
     try:
