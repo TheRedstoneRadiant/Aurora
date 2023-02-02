@@ -5,7 +5,7 @@ import json
 from utils.config import load_config
 from discord.ext import commands
 
-config = load_config("config.json")
+config = load_config(os.path.join(os.getcwd(), "config.json"))
 
 client.prefix_latest = config.get("prefix", ",")
 
