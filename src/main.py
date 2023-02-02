@@ -7,9 +7,6 @@ from discord.ext import commands
 
 config = load_config(os.path.join(os.getcwd(), "config.json"))
 
-client.prefix_latest = config.get("prefix", ",")
-
-
 async def get_latest_prefix(bot, message):
     return client.prefix_latest
 
@@ -21,6 +18,8 @@ client = commands.Bot(
     status=getattr(discord.Status, config.get("status", "idle")),
     guild_subscription_options=discord.GuildSubscriptionOptions.off(),
 )
+
+client.prefix_latest = config.get("prefix", ",")
 
 cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config"]
 
