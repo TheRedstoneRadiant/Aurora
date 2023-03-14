@@ -1,0 +1,1 @@
+run = "python src/main.py REPLIT=true"
