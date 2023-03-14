@@ -1,7 +1,6 @@
 import os
 import sys
 import discord
-import json
 from utils.config import load_config
 from discord.ext import commands
 
