@@ -26,17 +26,18 @@ cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config"]
 if "CANVAS_TOKEN" in os.environ:
     cogs.append("cogs.canvas")  # enables canvas module
 
+# Load bot cogs
+for cog in cogs:
+    try:
+        client.load_extension(cog)
+        print(f"Loaded '{cog}'")
+
+    except Exception as e:
+        print(f"Error when loading {cog}\n{e}")
 
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
-    for cog in cogs:
-        try:
-            client.load_extension(cog)
-            print(f"Loaded '{cog}'")
-
-        except Exception as e:
-            print(f"Error when loading {cog}\n{e}")
 
 try:
     stdout = sys.stdout
