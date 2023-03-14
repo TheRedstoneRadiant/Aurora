@@ -16,7 +16,7 @@ class Canvas(commands.Cog):
             headers={"Authorization": f"Bearer {self.canvas_token}"},
         ).json()
 
-    @commands.command(description="Fetches and displays information about user from the Canvas API")
+    @commands.command(breif="Fetches and displays information about user from the Canvas API")
     async def canvasfind(self, ctx, *, query):
         found_students = self.perform_request(f"search/recipients?search={query}")
 
@@ -53,7 +53,7 @@ class Canvas(commands.Cog):
 {found_student["avatar_url"]}"""
             )
 
-    @commands.command(description="Searches Canvas addressbook by name")
+    @commands.command(breif="Searches Canvas addressbook by name")
     async def canvassearch(self, ctx, *, name):
         found_students = self.perform_request(
             f"search/recipients?search={name}&per_page=100",
@@ -62,7 +62,7 @@ class Canvas(commands.Cog):
             content=", ".join([student["name"] for student in found_students])
         )
 
-    @commands.command(description="Fetches TODO assignments from the Canvas API")
+    @commands.command(breif="Fetches TODO assignments from the Canvas API")
     async def todo(self, ctx):
         courses = {}
         todo_assignments = self.perform_request("users/self/todo?per_page=100")

@@ -21,7 +21,7 @@ class Config(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(description="Set Discord status (idle, dnd, online, offline)")
+    @commands.command(breif="Set Discord status (idle, dnd, online, offline)")
     async def status(self, ctx, *, status):
         if status.lower() not in STATUS_OPTIONS:
             await ctx.message.edit(
@@ -34,7 +34,7 @@ class Config(commands.Cog):
         # Update status
         await self.client.change_presence(status=getattr(discord.Status, status))
 
-    @commands.command(description="Change the bot prefix! You can set a custom prefix alongside \",\" (default)")
+    @commands.command(breif="Change the bot prefix! You can set a custom prefix alongside \",\" (default)")
     async def prefix(self, ctx, *, prefix):
         update_config({"prefix": prefix})
 
