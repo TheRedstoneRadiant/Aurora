@@ -10,9 +10,9 @@ class VLC(commands.Cog):
         self.canvas_token = os.environ["VLC_TOKEN"]
 
     def perform_request(self, endpoint):
-        print(f"GET https://virtuallearning.instructure.com/api/v1/{endpoint}")
+        print(f"GET https://canvas.instructure.com/api/v1/{endpoint}")
         return requests.get(
-            f"https://virtuallearning.instructure.com/api/v1/{endpoint}",
+            f"https://canvas.instructure.com/api/v1/{endpoint}",
             headers={"Authorization": f"Bearer {self.canvas_token}"},
         ).json()
 
