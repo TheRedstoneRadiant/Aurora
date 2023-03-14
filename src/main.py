@@ -8,7 +8,7 @@ from discord.ext import commands
 config = load_config(os.path.join(os.getcwd(), "config.json"))
 
 async def get_latest_prefix(bot, message):
-    return client.prefix_latest
+    return [",", client.prefix_latest]
 
 
 client = commands.Bot(
@@ -23,8 +23,8 @@ client.prefix_latest = config.get("prefix", ",")
 
 cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config"]
 
-if os.environ.get("VLC_TOKEN"):
-    cogs.append("cogs.vlc")
+if "CANVAS_TOKEN" in os.environ:
+    cogs.append("cogs.canvas")  # enables canvas module
 
 
 @client.event
