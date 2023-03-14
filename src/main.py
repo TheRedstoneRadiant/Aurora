@@ -8,7 +8,7 @@ from discord.ext import commands
 config = load_config(os.path.join(os.getcwd(), "config.json"))
 
 async def get_latest_prefix(bot, message):
-    return client.prefix_latest
+    return [",", client.prefix_latest]
 
 
 client = commands.Bot(
