@@ -29,6 +29,33 @@ class Utility(commands.Cog):
                 if msg.author == self.client.user:
                     await msg.delete()
                     counter += 1
+                    
+    @commands.command(description="Purges all messages, not just yours")
+    async def purgeall(self, ctx, amount=None):
+        if amount is None:
+            if ctx.message.reference:
+                async for msg in ctx.channel.history(limit=None):
+                    try:
+                        await msg.delete()
+                    except:
+                        pass
+                    
+                    if (
+                        msg.id == ctx.message.reference.message_id
+                    ):  # once initial message is reached
+                        return
+        else:
+            amount = int(amount)
+            counter = -1
+            async for msg in ctx.channel.history(limit=None):
+                if counter >= amount:
+                    return
+
+                try:
+                    await msg.delete()
+                    counter += 1
+                except:
+                    pass # this code is garbage
 
     @commands.command()
     async def joinvc(self, ctx, id):
@@ -121,3 +148,6 @@ Password: {identity["login"]["password"]}
 
 def setup(client):
     client.add_cog(Utility(client))
+    
+    
+    # JohnWick was here 3-14-23 <3
