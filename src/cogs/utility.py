@@ -8,7 +8,7 @@ class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(breif="Deletes a specific amount of messages in the current channel, or upto the message that you reply til")
+    @commands.command(brief="Deletes a specific amount of messages in the current channel, or upto the message that you reply til")
     async def purge(self, ctx, amount=None):
         if amount is None:
             if ctx.message.reference:
@@ -30,7 +30,7 @@ class Utility(commands.Cog):
                     await msg.delete()
                     counter += 1
                     
-    @commands.command(breif="Same as ,purge but for every user (needs manage messages)")
+    @commands.command(brief="Same as ,purge but for every user (needs manage messages)")
     async def purgeall(self, ctx, amount=None):
         if amount is None:
             if ctx.message.reference:
@@ -57,11 +57,11 @@ class Utility(commands.Cog):
                 except:
                     pass
 
-    @commands.command(breif="Fetches and joins a voice channel by ID")
+    @commands.command(brief="Fetches and joins a voice channel by ID")
     async def joinvc(self, ctx, id):
         await self.client.get_channel(int(id)).connect()
 
-    @commands.command(breif="Lookup information about a Discord user")
+    @commands.command(brief="Lookup information about a Discord user")
     async def fetch(self, ctx, id):
         if "<@" in id:
             id = id.strip("<@").strip(">")
@@ -77,7 +77,7 @@ class Utility(commands.Cog):
 
         await ctx.message.edit(content=msg)
 
-    @commands.command(breif="Fetches wikipedia for a short summary of your query")
+    @commands.command(brief="Fetches wikipedia for a short summary of your query")
     async def whatis(self, ctx, query):
         r = requests.get(
             f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={query}"
@@ -99,7 +99,7 @@ class Utility(commands.Cog):
 """
         )
 
-    @commands.command(aliases=["wiki"], breif="Lists out wikipedia articles that are relevant to your query")
+    @commands.command(aliases=["wiki"], brief="Lists out wikipedia articles that are relevant to your query")
     async def wikipedia(self, ctx, query):
         response = requests.get(
             f"https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&namespace=0&format=json"
@@ -118,7 +118,7 @@ class Utility(commands.Cog):
 """
         )
 
-    @commands.command(breif="Useful little fake identity command for placeholder data")
+    @commands.command(brief="Useful little fake identity command for placeholder data")
     async def fakeuser(self, ctx, nationality=None):
         url = "https://randomuser.me/api/1.4"
         if nationality:

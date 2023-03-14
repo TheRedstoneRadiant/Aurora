@@ -7,7 +7,7 @@ class Meme(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(breif="https://github.com.cat-milk/Anime-Girls-Holding-Programming-Books Self explanatory")
+    @commands.command(brief="https://github.com.cat-milk/Anime-Girls-Holding-Programming-Books Self explanatory")
     async def programmingbook(self, ctx):
         language = random.choice(
             requests.get(
