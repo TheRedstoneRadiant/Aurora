@@ -4,7 +4,7 @@ from discord.ext import commands
 from datetime import datetime
 
 
-class VLC(commands.Cog):
+class Canvas(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.canvas_token = os.environ["CANVAS_TOKEN"]
@@ -16,8 +16,8 @@ class VLC(commands.Cog):
             headers={"Authorization": f"Bearer {self.canvas_token}"},
         ).json()
 
-    @commands.command()
-    async def vlcfind(self, ctx, *, query):
+    @commands.command(description="Fetches and displays information about user from the Canvas API")
+    async def canvasfind(self, ctx, *, query):
         found_students = self.perform_request(f"search/recipients?search={query}")
 
         if not found_students:
@@ -46,15 +46,15 @@ class VLC(commands.Cog):
 {", ".join([course["name"] for course in courses if str(
     course["id"]) in common_courses])}
 
-**Joined VLC:**
+**Join Date:**
 <t:{int(join_date.timestamp())}:R>
 
 **Canvas avatar:**
 {found_student["avatar_url"]}"""
             )
 
-    @commands.command()
-    async def vlcsearch(self, ctx, *, name):
+    @commands.command(description="Searches Canvas addressbook by name")
+    async def canvassearch(self, ctx, *, name):
         found_students = self.perform_request(
             f"search/recipients?search={name}&per_page=100",
         )
@@ -62,7 +62,7 @@ class VLC(commands.Cog):
             content=", ".join([student["name"] for student in found_students])
         )
 
-    @commands.command()
+    @commands.command(description="Fetches TODO assignments from the Canvas API")
     async def todo(self, ctx):
         courses = {}
         todo_assignments = self.perform_request("users/self/todo?per_page=100")
@@ -83,4 +83,4 @@ class VLC(commands.Cog):
 
 
 def setup(client):
-    client.add_cog(VLC(client))
+    client.add_cog(Canvas(client))
