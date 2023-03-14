@@ -23,8 +23,8 @@ client.prefix_latest = config.get("prefix", ",")
 
 cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config"]
 
-if os.environ.get("VLC_TOKEN"):
-    cogs.append("cogs.vlc")
+if "CANVAS_TOKEN" in os.environ:
+    cogs.append("cogs.canvas")  # enables canvas module
 
 
 @client.event
