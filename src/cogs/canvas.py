@@ -7,7 +7,7 @@ from datetime import datetime
 class VLC(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.canvas_token = os.environ["VLC_TOKEN"]
+        self.canvas_token = os.environ["CANVAS_TOKEN"]
 
     def perform_request(self, endpoint):
         print(f"GET https://canvas.instructure.com/api/v1/{endpoint}")
