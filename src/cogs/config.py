@@ -36,7 +36,7 @@ class Config(commands.Cog):
         await self.client.change_presence(status=getattr(discord.Status, status))
         
         # Success message
-        await ctx.message.edit("Status updated.")
+        await ctx.message.edit(content="Status updated.")
 
     @commands.command(brief="Change the bot prefix! You can set a custom prefix alongside \",\" (default)")
     async def prefix(self, ctx, *, prefix):
@@ -45,7 +45,7 @@ class Config(commands.Cog):
         # Update prefix
         self.client.prefix_latest = prefix
         
-        await ctx.message.edit(f"Prefix updated. Your prefix is now \"{prefix}\.")
+        await ctx.message.edit(content=f"Prefix updated. Your prefix is now \"{prefix}\.")
 
 
 def setup(client):
