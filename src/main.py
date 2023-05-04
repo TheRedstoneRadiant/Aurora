@@ -15,7 +15,7 @@ client = commands.Bot(
     self_bot=True,
     command_prefix=get_latest_prefix,
     case_insensitive=True,
-    status=getattr(discord.Status, config.get("status", "idle")),
+    status=getattr(discord.Status, config.get("status", "invisible")),
     guild_subscription_options=discord.GuildSubscriptionOptions.off(),
 )
 
