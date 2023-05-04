@@ -26,7 +26,7 @@ class Config(commands.Cog):
         status = status.lower()
         if status not in STATUS_OPTIONS:
             return await ctx.message.edit(
-                "Valid options: "
+                content="Valid options: "
                 + ", ".join(option.capitalize() for option in STATUS_OPTIONS)
             )
 
@@ -34,18 +34,22 @@ class Config(commands.Cog):
 
         # Update status
         await self.client.change_presence(status=getattr(discord.Status, status))
-        
+
         # Success message
         await ctx.message.edit(content="Status updated.")
 
-    @commands.command(brief="Change the bot prefix! You can set a custom prefix alongside \",\" (default)")
+    @commands.command(
+        brief='Change the bot prefix! You can set a custom prefix alongside "," (default)'
+    )
     async def prefix(self, ctx, *, prefix):
         update_config({"prefix": prefix})
 
         # Update prefix
         self.client.prefix_latest = prefix
-        
-        await ctx.message.edit(content=f"Prefix updated. Your prefix is now \"{prefix}\.")
+
+        await ctx.message.edit(
+            content=f'Prefix updated. Your prefix is now "{prefix}\.'
+        )
 
 
 def setup(client):
