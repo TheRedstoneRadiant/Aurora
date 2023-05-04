@@ -3,7 +3,6 @@ import sys
 import discord
 from utils.config import load_config
 from discord.ext import commands
-from webserver import start_webserver
 
 config = load_config(os.path.join(os.getcwd(), "config.json"))
 
@@ -44,7 +43,10 @@ try:
     f = open("log.txt", "w")
     sys.stdout = f
     
+    # Replit webserver
     if "REPLIT" in os.environ:
+        from webserver import start_webserver
+        
         start_webserver()
 
     client.run(os.environ["TOKEN"])
