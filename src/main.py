@@ -44,7 +44,7 @@ try:
     f = open("log.txt", "w")
     sys.stdout = f
     
-    if os.environ.get("REPLIT"):
+    if "REPLIT" in os.environ:
         start_webserver()
 
     client.run(os.environ["TOKEN"])
