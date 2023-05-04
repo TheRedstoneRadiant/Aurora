@@ -11,7 +11,7 @@ def load_config(config_path: str) -> dict:
     except (FileNotFoundError, json.decoder.JSONDecodeError):
         print(f"[!] Config Reset ({config_path})")
 
-        config = {"prefix": ",", "status": "idle"}
+        config = {"prefix": ",", "status": "offline"}
 
         with open(config_path, "w") as file:
             json.dump(config, file)
