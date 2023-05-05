@@ -6,6 +6,7 @@ from discord.ext import commands
 
 config = load_config(os.path.join(os.getcwd(), "config.json"))
 
+
 async def get_latest_prefix(bot, message):
     return [",", client.prefix_latest]
 
@@ -34,19 +35,26 @@ for cog in cogs:
     except Exception as e:
         print(f"Error when loading {cog}\n{e}")
 
+
 @client.event
 async def on_ready():
     print(f"Logged in as {client.user}")
+
+
+@client.event
+async def on_command_error(ctx, error):
+    await ctx.message.edit(f"An error occured: {str(error)}")
+
 
 try:
     stdout = sys.stdout
     f = open("log.txt", "w")
     sys.stdout = f
-    
+
     # Replit webserver
     if "REPLIT" in os.environ:
         from webserver import start_webserver
-        
+
         start_webserver()
 
     client.run(os.environ["TOKEN"])
