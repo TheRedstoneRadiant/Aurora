@@ -7,13 +7,13 @@ STATUS_OPTIONS = ("idle", "invisible", "online", "dnd")
 
 
 def update_config(payload: dict):
-    with open("config.json", "w+") as file:
+    with open("config.json", "r") as file:
         config = json.load(file)
 
+    with open("config.json", "w") as file:
         for key, value in payload.items():
             config[key] = value
 
-        file.seek(0)
         json.dump(config, file)
 
 
