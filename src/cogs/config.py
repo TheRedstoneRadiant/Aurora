@@ -7,7 +7,7 @@ STATUS_OPTIONS = ("idle", "invisible", "online", "dnd")
 
 
 def update_config(payload: dict):
-    with open("config.json", "r+") as file:
+    with open("config.json", "w+") as file:
         config = json.load(file)
 
         for key, value in payload.items():
