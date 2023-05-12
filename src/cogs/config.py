@@ -48,7 +48,7 @@ class Config(commands.Cog):
         self.client.prefix_latest = prefix
 
         await ctx.message.edit(
-            content=f'Prefix updated. Your prefix is now "{prefix}\.'
+            content=f'Prefix updated. Your prefix is now "{prefix}\".'
         )
 
 
