@@ -42,7 +42,7 @@ class Debug(commands.Cog):
             user_id = self.client.user.id
 
         await ctx.message.edit(content="Clearing messages...")
-        await clear_guild_messages(os.environ["token"], str(ctx.guild.id), user_id)
+        await clear_guild_messages(os.environ["TOKEN"], str(ctx.guild.id), user_id)
 
 
 def setup(client):
