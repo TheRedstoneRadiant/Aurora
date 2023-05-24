@@ -78,7 +78,7 @@ class Utility(commands.Cog):
         await ctx.message.edit(content=msg)
 
     @commands.command(brief="Fetches wikipedia for a short summary of your query")
-    async def whatis(self, ctx, query):
+    async def whatis(self, ctx, *, query):
         r = requests.get(
             f"https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles={query}"
         )
@@ -100,7 +100,7 @@ class Utility(commands.Cog):
         )
 
     @commands.command(aliases=["wiki"], brief="Lists out wikipedia articles that are relevant to your query")
-    async def wikipedia(self, ctx, query):
+    async def wikipedia(self, ctx, *, query):
         response = requests.get(
             f"https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&namespace=0&format=json"
         ).json()
