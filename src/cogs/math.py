@@ -10,7 +10,7 @@ class Math(commands.Cog):
         aliases=["w"],
         brief="Render math as LaTeX!",
     )
-    async def latex(self, ctx, latex):
+    async def latex(self, ctx, *, latex):
         response = requests.post(
             "http://latex2png.com/api/convert",
             data=json.dumps(
