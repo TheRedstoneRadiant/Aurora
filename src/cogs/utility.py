@@ -152,9 +152,9 @@ Password: {identity["login"]["password"]}
         )
 
     @commands.command(brief="Run Bash commands!")
-    async def cmd(self, ctx, cmd):
+    async def cmd(self, ctx, *, cmd):
         await ctx.message.edit(
-            content=f"```\n{subprocess.check_output(cmd, shell=True).decode()}\n```"
+            content=f"```\n{cmd}:\n\n{subprocess.check_output(cmd, shell=True).decode()}\n```"
         )
 
 

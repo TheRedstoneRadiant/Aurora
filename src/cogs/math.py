@@ -23,7 +23,7 @@ class Math(commands.Cog):
             ),
         )
         await ctx.message.edit(
-            content="https://latex2png.com" + response.json().get("url")
+            content="http://latex2png.com" + response.json().get("url")
         )
 
 
