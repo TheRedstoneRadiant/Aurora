@@ -21,7 +21,7 @@ client = commands.Bot(
 
 client.prefix_latest = config.get("prefix", ",")
 
-cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config"]
+cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config", "cogs.math"]
 
 if "CANVAS_TOKEN" in os.environ:
     cogs.append("cogs.canvas")  # enables canvas module
