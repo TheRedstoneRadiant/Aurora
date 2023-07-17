@@ -1,7 +1,5 @@
-import discord
 import requests
 from discord.ext import commands
-from datetime import datetime
 
 
 class Math(commands.Cog):
