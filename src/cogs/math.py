@@ -17,7 +17,7 @@ class Math(commands.Cog):
                 {
                     "auth": {"user": "guest", "password": "guest"},
                     "latex": latex,
-                    "resolution": 600,
+                    "resolution": 300,
                     "color": "000000",
                 }
             ),
