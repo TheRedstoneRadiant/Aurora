@@ -1,2 +1,2 @@
 requests
-discord.py-self
+discord.py-self[voice]==1.9.2

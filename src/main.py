@@ -1,11 +1,12 @@
 import os
 import sys
 import discord
+import logging
 from utils.config import load_config
 from discord.ext import commands
 
 config = load_config(os.path.join(os.getcwd(), "config.json"))
-
+handler = logging.FileHandler(filename='discord_log.txt', encoding='utf-8', mode='w')
 
 async def get_latest_prefix(bot, message):
     return [",", client.prefix_latest]
@@ -16,7 +17,7 @@ client = commands.Bot(
     command_prefix=get_latest_prefix,
     case_insensitive=True,
     status=getattr(discord.Status, config.get("status", "invisible")),
-    guild_subscription_options=discord.GuildSubscriptionOptions.off(),
+    log_handler=handler
 )
 
 client.prefix_latest = config.get("prefix", ",")
