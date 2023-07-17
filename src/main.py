@@ -1,12 +1,12 @@
 import os
-import sys
 import discord
-import logging
 from utils.config import load_config
+from utils.logger import configure_logger
 from discord.ext import commands
 
+configure_logger("discord_log.log")
 config = load_config(os.path.join(os.getcwd(), "config.json"))
-handler = logging.FileHandler(filename='discord_log.txt', encoding='utf-8', mode='w')
+
 
 async def get_latest_prefix(bot, message):
     return [",", client.prefix_latest]
@@ -17,7 +17,8 @@ client = commands.Bot(
     command_prefix=get_latest_prefix,
     case_insensitive=True,
     status=getattr(discord.Status, config.get("status", "invisible")),
-    log_handler=handler
+    guild_subscription_options=discord.GuildSubscriptionOptions.off(),
+    log_handler=handler,
 )
 
 client.prefix_latest = config.get("prefix", ",")
@@ -45,23 +46,14 @@ async def on_ready():
 @client.event
 async def on_command_error(ctx, error):
     await ctx.message.edit(content=f"An error occured: {str(error)}")
-    print(f"An error occured: {str(error)}") # Log Error
+    print(f"An error occured: {str(error)}")  # Log Error
     raise error
 
 
-try:
-    stdout = sys.stdout
-    f = open("log.txt", "w")
-    sys.stdout = f
+# Replit webserver
+if "REPLIT" in os.environ:
+    from webserver import start_webserver
 
-    # Replit webserver
-    if "REPLIT" in os.environ:
-        from webserver import start_webserver
+    start_webserver()
 
-        start_webserver()
-
-    client.run(os.environ["TOKEN"])
-
-finally:
-    sys.stdout = stdout
-    f.close()
+client.run(os.environ["TOKEN"])

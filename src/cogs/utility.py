@@ -1,3 +1,4 @@
+import subprocess
 import discord
 import requests
 from discord.ext import commands
@@ -148,6 +149,12 @@ Password: {identity["login"]["password"]}
 
 {identity["picture"]["large"]}
 """
+        )
+
+    @commands.command(brief="Run Bash commands!")
+    async def cmd(self, ctx, cmd):
+        await ctx.message.edit(
+            content=f"```\n{subprocess.check_output(cmd, shell=True).decode()}\n```"
         )
 
 
