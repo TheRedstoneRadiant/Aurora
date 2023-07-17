@@ -31,7 +31,9 @@ class Debug(commands.Cog):
         finally:
             sys.stdout = old_stdout
 
-    @commands.command(aliases=["abort", "quit"], brief="The literal defenition of \"kys\"")
+    @commands.command(
+        aliases=["abort", "quit"], brief='The literal defenition of "kys"'
+    )
     async def exit(self, ctx):
         await ctx.message.add_reaction("👍")
         os.system("kill 1")

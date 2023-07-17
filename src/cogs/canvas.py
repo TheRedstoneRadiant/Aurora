@@ -16,7 +16,9 @@ class Canvas(commands.Cog):
             headers={"Authorization": f"Bearer {self.canvas_token}"},
         ).json()
 
-    @commands.command(brief="Fetches and displays information about user from the Canvas API")
+    @commands.command(
+        brief="Fetches and displays information about user from the Canvas API"
+    )
     async def canvasfind(self, ctx, *, query):
         found_students = self.perform_request(f"search/recipients?search={query}")
 

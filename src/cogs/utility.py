@@ -8,7 +8,9 @@ class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(brief="Deletes a specific amount of messages in the current channel, or upto the message that you reply til")
+    @commands.command(
+        brief="Deletes a specific amount of messages in the current channel, or upto the message that you reply to"
+    )
     async def purge(self, ctx, amount=None):
         if amount is None:
             if ctx.message.reference:
@@ -29,7 +31,7 @@ class Utility(commands.Cog):
                 if msg.author == self.client.user:
                     await msg.delete()
                     counter += 1
-                    
+
     @commands.command(brief="Same as ,purge but for every user (needs manage messages)")
     async def purgeall(self, ctx, amount=None):
         if amount is None:
@@ -39,7 +41,7 @@ class Utility(commands.Cog):
                         await msg.delete()
                     except:
                         pass
-                    
+
                     if (
                         msg.id == ctx.message.reference.message_id
                     ):  # once initial message is reached
@@ -99,7 +101,10 @@ class Utility(commands.Cog):
 """
         )
 
-    @commands.command(aliases=["wiki"], brief="Lists out wikipedia articles that are relevant to your query")
+    @commands.command(
+        aliases=["wiki"],
+        brief="Lists out wikipedia articles that are relevant to your query",
+    )
     async def wikipedia(self, ctx, *, query):
         response = requests.get(
             f"https://en.wikipedia.org/w/api.php?action=opensearch&search={query}&namespace=0&format=json"
@@ -148,6 +153,5 @@ Password: {identity["login"]["password"]}
 
 def setup(client):
     client.add_cog(Utility(client))
-    
-    
+
     # JohnWick was here 3-14-23 <3
