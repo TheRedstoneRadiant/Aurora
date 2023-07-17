@@ -4,7 +4,7 @@ from utils.config import load_config
 from utils.logger import configure_logger
 from discord.ext import commands
 
-configure_logger("discord_log.log")
+handler = configure_logger("discord_log.log")
 config = load_config(os.path.join(os.getcwd(), "config.json"))
 
 

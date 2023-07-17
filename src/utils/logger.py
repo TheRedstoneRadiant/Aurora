@@ -27,3 +27,5 @@ def configure_logger(filename):
 
     # Redirect stdout to the logger
     sys.stdout = logger
+
+    return logger
