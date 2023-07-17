@@ -19,7 +19,7 @@ class Math(commands.Cog):
             % latex,
         )
         await ctx.message.edit(
-            content="https://latex2png.com/api/convert" + response.json().get("url")
+            content="https://latex2png.com/" + response.json().get("url")
         )
 
 
