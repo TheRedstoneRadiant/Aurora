@@ -29,12 +29,8 @@ class Nuke(commands.Cog):
         await ctx.message.edit(content=f"{len(members)} members")
 
     @commands.command(brief="Mass ping users in the current channel.", aliases=["mp"])
-    async def massping(self, ctx, max_people_amount=None):
+    async def massping(self, ctx, message_count, mention_limit=20):
         members = self.get_channel_members(ctx)
-
-        # Strip max people pinged
-        if max_people_amount:
-            members = members[: int(max_people_amount)]
 
         # Randomly shuffle members
         random.shuffle(members)
@@ -43,10 +39,10 @@ class Nuke(commands.Cog):
         for member in members:
             pings.append(member.mention)
 
-        # Split into messages of 90 pings (2000 / 22)
+        # Split into messages
         messages = []
-        for i in range(0, len(pings), 90):
-            messages.append("".join(pings[i : i + 90]))
+        for i in range(0, message_count, mention_limit):
+            messages.append("".join(pings[i : i + mention_limit]))
 
         for message in messages:
             try:
@@ -54,7 +50,7 @@ class Nuke(commands.Cog):
 
             # Automod mention limits
             except discord.errors.HTTPException:
-                await ctx.message.edit(content="Server blocked.")
+                await ctx.message.delete()
                 break
 
     @commands.command(brief="Spam a message automatically", aliases=["s"])
