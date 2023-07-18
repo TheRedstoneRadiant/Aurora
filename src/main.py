@@ -50,6 +50,14 @@ async def on_command_error(ctx, error):
     raise error
 
 
+@client.command()
+async def reload_cogs(_):
+    for cog in cogs:
+        try:
+            client.reload_extension()
+        except Exception as e:
+            print(f"Error when reloading {cog}\n{e}")
+
 # Replit webserver
 if "REPLIT" in os.environ:
     from webserver import start_webserver
