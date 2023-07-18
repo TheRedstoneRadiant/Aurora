@@ -14,7 +14,7 @@ class Nuke(commands.Cog):
 
         # Direct Message
         elif isinstance(ctx.channel, discord.DMChannel):
-            return [ctx.channel.recipient]
+            return [ctx.channel.recipient, ctx.message.author]
 
         # Groupchat
         elif isinstance(ctx.channel, discord.GroupChannel):
