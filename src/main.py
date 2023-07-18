@@ -23,7 +23,14 @@ client = commands.Bot(
 
 client.prefix_latest = config.get("prefix", ",")
 
-cogs = ["cogs.utility", "cogs.debug", "cogs.meme", "cogs.config", "cogs.math", "cogs.nuke"]
+cogs = [
+    "cogs.utility",
+    "cogs.debug",
+    "cogs.meme",
+    "cogs.config",
+    "cogs.math",
+    "cogs.nuke",
+]
 
 if "CANVAS_TOKEN" in os.environ:
     cogs.append("cogs.canvas")  # enables canvas module
@@ -57,6 +64,7 @@ async def reload_cogs(_):
             client.reload_extension()
         except Exception as e:
             print(f"Error when reloading {cog}\n{e}")
+
 
 # Replit webserver
 if "REPLIT" in os.environ:

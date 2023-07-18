@@ -7,20 +7,22 @@ class Nuke(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    def get_channel_members(ctx):
+    def get_channel_members(self, ctx):
         # Guild text channel
         if isinstance(ctx.channel, discord.TextChannel):
             return ctx.channel.members
-        
+
         # Direct Message
         elif isinstance(ctx.channel, discord.DMChannel):
             return [ctx.channel.recipient]
-        
+
         # Groupchat
         elif isinstance(ctx.channel, discord.GroupChannel):
             return ctx.channel.recipients
 
-    @commands.command(brief="Lists the amount of members in the current channel.", aliases=["mc"])
+    @commands.command(
+        brief="Lists the amount of members in the current channel.", aliases=["mc"]
+    )
     async def membercount(self, ctx):
         members = self.get_channel_members(ctx)
 
@@ -32,8 +34,8 @@ class Nuke(commands.Cog):
 
         # Strip max people pinged
         if max_people_amount:
-            members = members[:int(max_people_amount)]
-        
+            members = members[: int(max_people_amount)]
+
         # Randomly shuffle members
         random.shuffle(members)
 
