@@ -1,5 +1,6 @@
 import os
 import discord
+import random
 from utils.config import load_config
 from utils.logger import configure_logger
 from discord.ext import commands
@@ -17,7 +18,6 @@ client = commands.Bot(
     command_prefix=get_latest_prefix,
     case_insensitive=True,
     status=getattr(discord.Status, config.get("status", "invisible")),
-    guild_subscription_options=discord.GuildSubscriptionOptions.off(),
     log_handler=handler,
 )
 
