@@ -58,7 +58,7 @@ class Nuke(commands.Cog):
                 break
 
     @commands.command(brief="Spam a message automatically", aliases=["s"])
-    async def spam(self, ctx, amount, message):
+    async def spam(self, ctx, amount, *, message):
         for i in range(int(amount)):
             await ctx.channel.send(message)
 
