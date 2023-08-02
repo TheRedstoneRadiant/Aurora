@@ -29,32 +29,30 @@ class Nuke(commands.Cog):
         await ctx.message.edit(content=f"{len(members)} members")
 
     @commands.command(brief="Mass ping users in the current channel.", aliases=["mp"])
-    async def massping(self, ctx, message_count: int = 3, mention_limit: int = 20):
+    async def massping(self, ctx, mention_limit: int = 20, message_count: int = 3):
         members = self.get_channel_members(ctx)
-
-        # Randomly shuffle members
-        random.shuffle(members)
 
         pings = []
         for member in members:
             pings.append(member.mention)
 
-        # Split into messages
-        messages = []
-        for i in range(0, message_count, mention_limit):
-            messages.append("".join(pings[i : i + mention_limit]))
-
-        for message in messages:
+        # Send pings
+        for i in range(message_count):
             try:
+                # Randomly shuffle members
+                random.shuffle(pings)
+
+                message = "".join(pings[:mention_limit])
                 await ctx.channel.send(message, delete_after=0.00005)
 
             # Automod mention limits
             except discord.errors.HTTPException:
                 await ctx.message.delete()
-                break
+                return await self.massping(ctx, mention_limit // 2, message_count)
 
     @commands.command(brief="Spam a message automatically", aliases=["s"])
     async def spam(self, ctx, amount, *, message):
+        await ctx.message.edit(content=message)
         for i in range(int(amount)):
             await ctx.channel.send(message)
 
