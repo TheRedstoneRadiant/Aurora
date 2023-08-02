@@ -56,7 +56,7 @@ async def on_command_error(ctx, error):
     raise error
 
 
-@client.command()
+@client.command(aliases=['r', 'reload'])
 async def reload_cogs(ctx):
     for cog in cogs:
         try:
