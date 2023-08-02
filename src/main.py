@@ -61,7 +61,8 @@ async def on_command_error(ctx, error):
 async def reload_cogs(_):
     for cog in cogs:
         try:
-            client.reload_extension()
+            client.reload_extension(name=cog)
+            print(f"Reloaded {cog}")
         except Exception as e:
             print(f"Error when reloading {cog}\n{e}")
 
