@@ -1,3 +1,4 @@
+import re
 import subprocess
 import discord
 import requests
@@ -156,6 +157,65 @@ Password: {identity["login"]["password"]}
         await ctx.message.edit(
             content=f"```\n{cmd}:\n\n{subprocess.check_output(cmd, shell=True).decode()}\n```"
         )
+
+    @staticmethod
+    def parse_duration(duration):
+        unit_multipliers = {
+            's': 1,
+            'm': 60,
+            'h': 3600,
+            'd': 86400,
+            'w': 604800,
+            'y': 31536000
+        }
+
+        match = re.match(r'(\d+)([smhdwy])', duration)
+        if not match:
+            return None
+
+        num, unit = match.groups()
+        num = int(num)
+        return num * unit_multipliers[unit]
+
+
+    @commands.command(aliases=['p', 'paste'], brief="Creates a paste on a pastebin service with an optional expiration duration for the content. This command allows you to quickly share code or text with others by posting it to a pastebin and provides an option to set the duration of how long the paste should be available. The command also supports attaching files to the paste, and if no text is provided, it will use the content of the attached files. Use durations like '1s' for one second, '1m' for one minute, '1h' for one hour, '1d' for one day, '1w' for one week, or '1y' for one year.")
+    async def pastebin(self, ctx, duration: str = None, *, text: str = None):
+        if duration is None:
+            multiplier = 2592000
+            expire_seconds = 999
+        
+        else:
+            multiplier = 1
+
+            # Parse the duration and convert to seconds
+            expire_seconds = self.parse_duration(duration)
+            if expire_seconds is None:
+                return await ctx.message.edit(content="Invalid duration format. Use '1s', '1m', '1h', '1d', '1w', or '1y'.")
+
+        # Handle text parameter
+        if text is None:
+            attachments_content = []
+            for attachment in ctx.message.attachments:
+                file_content = (await attachment.read()).decode('utf-8')
+                attachments_content.append(f"==== {attachment.filename} ====\n{file_content}")
+
+            text = "\n\n".join(attachments_content)
+
+        # Make the curl request
+        url = "https://paste.fyi/?redirect"
+        data = {
+            "paste": text,
+            "highlight": "",
+            "expire": expire_seconds,
+            "multiplier": multiplier
+        }
+
+        with requests.post(url, data=data) as response:
+            if response.status_code == 200:
+                pastebin_url = response.url
+                await ctx.message.reply(content=f"**{pastebin_url}**")
+            else:
+                await ctx.message.edit(content="Failed to create paste.")
 
 
 def setup(client):
