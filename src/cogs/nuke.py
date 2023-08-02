@@ -29,7 +29,7 @@ class Nuke(commands.Cog):
         await ctx.message.edit(content=f"{len(members)} members")
 
     @commands.command(brief="Mass ping users in the current channel.", aliases=["mp"])
-    async def massping(self, ctx, message_count: int=3, mention_limit: int=20):
+    async def massping(self, ctx, message_count: int = 3, mention_limit: int = 20):
         members = self.get_channel_members(ctx)
 
         # Randomly shuffle members

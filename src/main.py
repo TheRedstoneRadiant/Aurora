@@ -1,6 +1,5 @@
 import os
 import discord
-import random
 from utils.config import load_config
 from utils.logger import configure_logger
 from discord.ext import commands
