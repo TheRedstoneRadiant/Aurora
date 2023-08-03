@@ -49,6 +49,7 @@ class Client:
                 "queryTraceId": str(uuid4()),
                 "chat": "[]",
             },
+            proxy=""
         )
 
         return response

@@ -207,7 +207,7 @@ Password: {identity["login"]["password"]}
 
             attachments_content = []
             for attachment in ctx.message.attachments:
-                file_content = (await attachment.read()).decode("utf-8")
+                file_content = str(await attachment.read())[2:-1]
                 attachments_content.append(
                     f"==== {attachment.filename} ====\n{file_content}"
                 )
