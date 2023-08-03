@@ -1,2 +1,3 @@
 requests
 discord.py-self[voice]==1.9.2
+tls-client

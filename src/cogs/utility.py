@@ -1,9 +1,11 @@
-import re
 import subprocess
 import discord
 import requests
 from discord.ext import commands
 from datetime import datetime
+from utils.prop import Client
+
+client = Client()
 
 
 class Utility(commands.Cog):
@@ -155,7 +157,7 @@ Password: {identity["login"]["password"]}
     @commands.command(brief="Run Bash commands!")
     async def cmd(self, ctx, *, cmd):
         await ctx.message.edit(
-            content=f"```\n{cmd}:\n\n{subprocess.check_output(cmd, shell=True).decode()}\n```"
+            content=f"```\n{cmd}:\n\n{subprocess.check_output(cmd, shell=True).decode()[:1980]}\n```"
         )
 
     # @staticmethod
@@ -177,40 +179,43 @@ Password: {identity["login"]["password"]}
     #     num = int(num)
     #     return num * unit_multipliers[unit]
 
-
-    @commands.command(aliases=['p', 'paste'], brief="Creates a paste on a pastebin service with an optional expiration duration for the content. This command allows you to quickly share code or text with others by posting it to a pastebin and provides an option to set the duration of how long the paste should be available. The command also supports attaching files to the paste, and if no text is provided, it will use the content of the attached files. Use durations like '1s' for one second, '1m' for one minute, '1h' for one hour, '1d' for one day, '1w' for one week, or '1y' for one year. (NOTE: DURATION CURRENTLY BROKEY!)")
-    async def pastebin(self, ctx, *, text: str = None):  # (self, ctx, duration: str = None, *, text: str = None):
+    @commands.command(
+        aliases=["p", "paste"],
+        brief="Creates a paste on a pastebin service with an optional expiration duration for the content. This command allows you to quickly share code or text with others by posting it to a pastebin and provides an option to set the duration of how long the paste should be available. The command also supports attaching files to the paste, and if no text is provided, it will use the content of the attached files. Use durations like '1s' for one second, '1m' for one minute, '1h' for one hour, '1d' for one day, '1w' for one week, or '1y' for one year. (NOTE: DURATION CURRENTLY BROKEY!)",
+    )
+    async def pastebin(
+        self, ctx, *, text: str = None
+    ):  # (self, ctx, duration: str = None, *, text: str = None):
         # if duration is None:
-            # multiplier = 2592000
-            # expire_seconds = 999
-        
+        # multiplier = 2592000
+        # expire_seconds = 999
+
         # else:
         #     multiplier = 1
 
         #     # Parse the duration and convert to seconds
         #     expire_seconds = self.parse_duration(duration)
         #     if expire_seconds is None:
-                # return await ctx.message.edit(content="Invalid duration format. Use '1s', '1m', '1h', '1d', '1w', or '1y'.")
+        # return await ctx.message.edit(content="Invalid duration format. Use '1s', '1m', '1h', '1d', '1w', or '1y'.")
 
         # Handle text parameter
         if text is None:
             if not ctx.message.attachments:
-                return await ctx.message.edit(content="Please attach files, or pass text parameter.")
+                return await ctx.message.edit(
+                    content="Please attach files, or pass text parameter."
+                )
 
             attachments_content = []
             for attachment in ctx.message.attachments:
-                file_content = (await attachment.read()).decode('utf-8')
-                attachments_content.append(f"==== {attachment.filename} ====\n{file_content}")
+                file_content = (await attachment.read()).decode("utf-8")
+                attachments_content.append(
+                    f"==== {attachment.filename} ====\n{file_content}"
+                )
 
             text = "\n\n".join(attachments_content)
 
         url = "https://paste.fyi/?redirect"
-        data = {
-            "paste": text,
-            "highlight": "",
-            "expire": 999,
-            "multiplier": 2592000
-        }
+        data = {"paste": text, "highlight": "", "expire": 999, "multiplier": 2592000}
 
         with requests.post(url, data=data) as response:
             if response.status_code == 200:
@@ -218,6 +223,16 @@ Password: {identity["login"]["password"]}
                 await ctx.message.reply(content=f"**{pastebin_url}**")
             else:
                 await ctx.message.edit(content="Failed to create paste.")
+
+    @commands.command(brief="Search the web.", aliases=["q"])
+    async def search(self, ctx, *, query):
+        response = client.q(query)
+        result = response["response"].replace("####", "##")
+        if len(result) > 2000:
+            await self.pastebin(ctx, text=result)
+
+        else:
+            await ctx.message.edit(content=result)
 
 
 def setup(client):

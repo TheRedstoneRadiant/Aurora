@@ -56,7 +56,7 @@ async def on_command_error(ctx, error):
     raise error
 
 
-@client.command(aliases=['r', 'reload'])
+@client.command(aliases=["r", "reload"])
 async def reload_cogs(ctx):
     for cog in cogs:
         try:
@@ -64,7 +64,7 @@ async def reload_cogs(ctx):
             print(f"Reloaded {cog}")
         except Exception as e:
             print(f"Error when reloading {cog}\n{e}")
-    
+
     await ctx.message.edit(content="Reloaded cogs.")
 
 
