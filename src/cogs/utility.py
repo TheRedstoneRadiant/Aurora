@@ -235,7 +235,5 @@ Password: {identity["login"]["password"]}
             await ctx.message.edit(content=result)
 
 
-def setup(client):
-    client.add_cog(Utility(client))
-
-    # JohnWick was here 3-14-23 <3
+async def setup(client):
+    await client.add_cog(Utility(client))

@@ -84,5 +84,5 @@ class Canvas(commands.Cog):
         await ctx.message.edit(content=content)
 
 
-def setup(client):
-    client.add_cog(Canvas(client))
+async def setup(client):
+    await client.add_cog(Canvas(client))

@@ -8,19 +8,9 @@ handler = configure_logger("discord_log.log")
 config = load_config(os.path.join(os.getcwd(), "config.json"))
 
 
-async def get_latest_prefix(bot, message):
+async def get_latest_prefix(_bot, _message):
     return [",", client.prefix_latest]
 
-
-client = commands.Bot(
-    self_bot=True,
-    command_prefix=get_latest_prefix,
-    case_insensitive=True,
-    status=getattr(discord.Status, config.get("status", "invisible")),
-    log_handler=handler,
-)
-
-client.prefix_latest = config.get("prefix", ",")
 
 cogs = [
     "cogs.utility",
@@ -34,14 +24,28 @@ cogs = [
 if "CANVAS_TOKEN" in os.environ:
     cogs.append("cogs.canvas")  # enables canvas module
 
-# Load bot cogs
-for cog in cogs:
-    try:
-        client.load_extension(cog)
-        print(f"Loaded '{cog}'")
 
-    except Exception as e:
-        print(f"Error when loading {cog}\n{e}")
+class MyClient(commands.Bot):
+    async def setup_hook(self):
+        # Load bot cogs
+        for cog in cogs:
+            try:
+                await client.load_extension(cog)
+                print(f"Loaded '{cog}'")
+
+            except Exception as e:
+                print(f"Error when loading {cog}\n{e}")
+
+
+client = MyClient(
+    self_bot=True,
+    command_prefix=get_latest_prefix,
+    case_insensitive=True,
+    status=getattr(discord.Status, config.get("status", "invisible")),
+    log_handler=handler,
+)
+
+client.prefix_latest = config.get("prefix", ",")
 
 
 @client.event
@@ -60,7 +64,7 @@ async def on_command_error(ctx, error):
 async def reload_cogs(ctx):
     for cog in cogs:
         try:
-            client.reload_extension(name=cog)
+            await client.reload_extension(name=cog)
             print(f"Reloaded {cog}")
         except Exception as e:
             print(f"Error when reloading {cog}\n{e}")

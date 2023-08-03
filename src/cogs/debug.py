@@ -47,5 +47,5 @@ class Debug(commands.Cog):
         await clear_guild_messages(os.environ["TOKEN"], str(ctx.guild.id), user_id)
 
 
-def setup(client):
-    client.add_cog(Debug(client))
+async def setup(client):
+    await client.add_cog(Debug(client))

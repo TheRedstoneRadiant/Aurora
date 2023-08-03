@@ -1,4 +1,6 @@
 import requests
+import io
+import discord
 import json
 from discord.ext import commands
 
@@ -23,10 +25,22 @@ class Math(commands.Cog):
                 }
             ),
         )
-        await ctx.message.edit(
-            content="http://latex2png.com" + response.json().get("url")
-        )
+
+        response = requests.get("http://latex2png.com" + response.json().get("url"))
+        
+        if response.status_code == 200:
+            img = response.content
+
+            with io.BytesIO(img) as file:
+                await ctx.message.edit(
+                    content=f'`{latex}`', attachments=[discord.File(file, "1.png")]
+                )
+
+        else:
+            return await ctx.message.edit(
+                content=f"Failed to fetch image: {response.status_code}"
+            )
 
 
-def setup(client):
-    client.add_cog(Math(client))
+async def setup(client):
+    await client.add_cog(Math(client))

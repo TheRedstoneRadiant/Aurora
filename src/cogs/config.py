@@ -52,5 +52,5 @@ class Config(commands.Cog):
         )
 
 
-def setup(client):
-    client.add_cog(Config(client))
+async def setup(client):
+    await client.add_cog(Config(client))
