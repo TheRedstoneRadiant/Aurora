@@ -7,7 +7,7 @@ class Meme(commands.Cog):
         self.client = client
 
     @commands.command(
-        brief="https://github.com.cat-milk/Anime-Girls-Holding-Programming-Books Self explanatory"
+        brief="Random image of an anime girl holding a programming book"
     )
     async def programmingbook(self, ctx):
         folders = [
@@ -42,6 +42,22 @@ class Meme(commands.Cog):
             return await ctx.message.edit(
                 content=f"Failed to fetch image: {response.status_code}"
             )
+        
+    @commands.command(brief="Generate a random XKCD comic")
+    async def xkcd(self, ctx):
+        latest_comic = requests.get("https://xkcd.com/info.0.json").json()
+        latest_comic_number = latest_comic["num"]
+
+        random_comic_num = random.randint(1, latest_comic_number)
+
+        random_comic = requests.get(f"https://xkcd.com/{random_comic_num}/info.0.json").json()
+        comic_img_url = random_comic["img"]
+
+        await ctx.message.edit(content=comic_img_url)
+
+    @commands.command(brief="Generate a random cute cat")
+    async def cat(self, ctx):
+        await ctx.message.edit(content=f"https://cataas.com/cat/cute?{random.randint(1,1000)}")
 
 
 async def setup(client):

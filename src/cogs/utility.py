@@ -13,7 +13,8 @@ class Utility(commands.Cog):
         self.client = client
 
     @commands.command(
-        brief="Deletes a specific amount of messages in the current channel, or upto the message that you reply to"
+        brief="Deletes a specific amount of messages in the current channel, or upto the message that you reply to",
+        aliases=["p"]
     )
     async def purge(self, ctx, amount=None):
         if amount is None:
@@ -180,7 +181,7 @@ Password: {identity["login"]["password"]}
     #     return num * unit_multipliers[unit]
 
     @commands.command(
-        aliases=["p", "paste"],
+        aliases=["paste"],
         brief="Creates a paste on a pastebin service with an optional expiration duration for the content. This command allows you to quickly share code or text with others by posting it to a pastebin and provides an option to set the duration of how long the paste should be available. The command also supports attaching files to the paste, and if no text is provided, it will use the content of the attached files. Use durations like '1s' for one second, '1m' for one minute, '1h' for one hour, '1d' for one day, '1w' for one week, or '1y' for one year. (NOTE: DURATION CURRENTLY BROKEY!)",
     )
     async def pastebin(
