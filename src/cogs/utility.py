@@ -14,7 +14,7 @@ class Utility(commands.Cog):
 
     @commands.command(
         brief="Deletes a specific amount of messages in the current channel, or upto the message that you reply to",
-        aliases=["p"]
+        aliases=["p"],
     )
     async def purge(self, ctx, amount=None):
         if amount is None:
@@ -128,7 +128,7 @@ class Utility(commands.Cog):
 """
         )
 
-    @commands.command(brief="Useful little fake identity command for placeholder data")
+    @commands.command(brief="Fake identity command for placeholder data")
     async def fakeuser(self, ctx, nationality=None):
         url = "https://randomuser.me/api/1.4"
         if nationality:
@@ -234,6 +234,24 @@ Password: {identity["login"]["password"]}
 
         else:
             await ctx.message.edit(content=result)
+
+    @commands.command(brief="Help command.")
+    async def help(self, ctx):
+        help_message = "Available commands:\n\n"
+
+        for cog in self.client.cogs.values():
+            cog_commands = cog.get_commands()
+            if cog_commands:
+                cog_name = cog.__class__.__name__
+                commands = "\n".join(
+                    f"{', '.join([str(command), *command.aliases])} - {command.brief[:65]}{'...' if len(command.brief) > 65 else ''}"
+                    for command in cog_commands
+                )
+                help_message += f"**{cog_name}:**\n{commands}\n\n"
+
+        help_message += f"\nUse `,help <command>` for more info on a specific command."
+
+        await ctx.message.edit(content=help_message)
 
 
 async def setup(client):

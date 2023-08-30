@@ -43,6 +43,7 @@ client = MyClient(
     case_insensitive=True,
     status=getattr(discord.Status, config.get("status", "invisible")),
     log_handler=handler,
+    help_command=None,
 )
 
 client.prefix_latest = config.get("prefix", ",")

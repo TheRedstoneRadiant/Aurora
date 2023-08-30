@@ -27,13 +27,13 @@ class Math(commands.Cog):
         )
 
         response = requests.get("http://latex2png.com" + response.json().get("url"))
-        
+
         if response.status_code == 200:
             img = response.content
 
             with io.BytesIO(img) as file:
                 await ctx.message.edit(
-                    content=f'`{latex}`', attachments=[discord.File(file, "1.png")]
+                    content=f"`{latex}`", attachments=[discord.File(file, "1.png")]
                 )
 
         else:
