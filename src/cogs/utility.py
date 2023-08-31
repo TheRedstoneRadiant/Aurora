@@ -1,4 +1,5 @@
 import subprocess
+import io
 import discord
 import requests
 from discord.ext import commands
@@ -11,6 +12,7 @@ client = Client()
 class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.snipe_cache = {}
 
     @commands.command(
         brief="Deletes a specific amount of messages in the current channel, or upto the message that you reply to",
@@ -74,7 +76,7 @@ class Utility(commands.Cog):
             id = id.strip("<@").strip(">")
 
         user = await self.client.fetch_user(int(id))
-        msg = f"{user} - {user.id}\nAvatar URL: {user.avatar_url}\nJoin date: <t:{int(user.created_at.timestamp())}>"
+        msg = f"{user} - {user.id}\nAvatar URL: {user.avatar}\nJoin date: <t:{int(user.created_at.timestamp())}>"
         banner_request = await self.client.http.request(
             discord.http.Route("GET", f"/users/{id}")
         )
@@ -161,44 +163,13 @@ Password: {identity["login"]["password"]}
             content=f"```\n{cmd}:\n\n{subprocess.check_output(cmd, shell=True).decode()[:1980]}\n```"
         )
 
-    # @staticmethod
-    # def parse_duration(duration):
-    #     unit_multipliers = {
-    #         's': 1,
-    #         'm': 60,
-    #         'h': 3600,
-    #         'd': 86400,
-    #         'w': 604800,
-    #         'y': 31536000
-    #     }
-
-    #     match = re.match(r'(\d+)([smhdwy])', duration)
-    #     if not match:
-    #         return None
-
-    #     num, unit = match.groups()
-    #     num = int(num)
-    #     return num * unit_multipliers[unit]
-
     @commands.command(
         aliases=["paste"],
         brief="Creates a paste on a pastebin service with an optional expiration duration for the content. This command allows you to quickly share code or text with others by posting it to a pastebin and provides an option to set the duration of how long the paste should be available. The command also supports attaching files to the paste, and if no text is provided, it will use the content of the attached files. Use durations like '1s' for one second, '1m' for one minute, '1h' for one hour, '1d' for one day, '1w' for one week, or '1y' for one year. (NOTE: DURATION CURRENTLY BROKEY!)",
     )
     async def pastebin(
         self, ctx, *, text: str = None
-    ):  # (self, ctx, duration: str = None, *, text: str = None):
-        # if duration is None:
-        # multiplier = 2592000
-        # expire_seconds = 999
-
-        # else:
-        #     multiplier = 1
-
-        #     # Parse the duration and convert to seconds
-        #     expire_seconds = self.parse_duration(duration)
-        #     if expire_seconds is None:
-        # return await ctx.message.edit(content="Invalid duration format. Use '1s', '1m', '1h', '1d', '1w', or '1y'.")
-
+    ):
         # Handle text parameter
         if text is None:
             if not ctx.message.attachments:
@@ -253,6 +224,33 @@ Password: {identity["login"]["password"]}
 
         await ctx.message.edit(content=help_message)
 
+    @commands.Cog.listener()
+    async def on_message_delete(self, message):
+        if message.attachments:
+            new_attachments = []
+
+            for attachment in message.attachments:
+                response = requests.get(attachment.url)
+
+                if response.status_code == 200:
+                    img = response.content
+
+                    with io.BytesIO(img) as file:
+                        new_attachments.append(discord.File(file, "1.png"))
+            
+            message.attachments = new_attachments
+
+        self.snipe_cache[message.channel.id] = message
+    
+    @commands.command()
+    async def snipe(self, ctx):
+        latest_snipe = self.snipe_cache.get(ctx.channel.id)
+        
+        if latest_snipe:
+            await ctx.message.edit(attachments=latest_snipe.attachments, content=f"**{str(latest_snipe.author).strip('#0')}**:\n{latest_snipe.content}")
+
+        else:
+            await ctx.message.delete()
 
 async def setup(client):
     await client.add_cog(Utility(client))
