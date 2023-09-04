@@ -56,7 +56,7 @@ class Nuke(commands.Cog):
                     ctx, mention_limit // 2, message_count, members
                 )
 
-    @commands.command(brief="Spam a message automatically", aliases=["s"])
+    @commands.command(brief="Spam a message automatically", aliases=["sp"])
     async def spam(self, ctx, amount, *, message):
         await ctx.message.edit(content=message)
         for i in range(0, int(amount)):  # amount - 1

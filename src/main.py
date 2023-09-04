@@ -73,6 +73,9 @@ async def reload_cogs(ctx):
     await ctx.message.edit(content="Reloaded cogs.")
 
 
+if "LOGGER_WEBHOOK_URL" in os.environ:
+    print(f"[!] Webhook message logging enabled.")
+
 # Replit webserver
 if "REPLIT" in os.environ:
     from webserver import start_webserver

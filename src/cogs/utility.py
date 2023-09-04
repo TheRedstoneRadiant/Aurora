@@ -1,5 +1,5 @@
 import subprocess
-import io
+import os
 import discord
 import requests
 from discord.ext import commands
@@ -167,9 +167,7 @@ Password: {identity["login"]["password"]}
         aliases=["paste"],
         brief="Creates a paste on a pastebin service with an optional expiration duration for the content. This command allows you to quickly share code or text with others by posting it to a pastebin and provides an option to set the duration of how long the paste should be available. The command also supports attaching files to the paste, and if no text is provided, it will use the content of the attached files. Use durations like '1s' for one second, '1m' for one minute, '1h' for one hour, '1d' for one day, '1w' for one week, or '1y' for one year. (NOTE: DURATION CURRENTLY BROKEY!)",
     )
-    async def pastebin(
-        self, ctx, *, text: str = None
-    ):
+    async def pastebin(self, ctx, *, text: str = None):
         # Handle text parameter
         if text is None:
             if not ctx.message.attachments:
@@ -215,14 +213,53 @@ Password: {identity["login"]["password"]}
             if cog_commands:
                 cog_name = cog.__class__.__name__
                 commands = "\n".join(
-                    f"{', '.join([str(command), *command.aliases])} - {command.brief[:65]}{'...' if len(command.brief) > 65 else ''}"
+                    f"{', '.join([str(command), *command.aliases])} - {command.brief[:65] if command.brief else ''}{'...' if command.brief and len(command.brief) > 65 else ''}"
                     for command in cog_commands
                 )
                 help_message += f"**{cog_name}:**\n{commands}\n\n"
 
-        help_message += f"\nUse `,help <command>` for more info on a specific command."
-
         await ctx.message.edit(content=help_message)
+
+    async def log_message(self, message, action):
+        IGNORED_GUILDS = [268882317391429632, 267624335836053506]
+
+        if (
+            not os.environ["LOGGER_WEBHOOK_URL"]
+            or message.author.bot
+            or message.guild
+            and message.guild.id in IGNORED_GUILDS
+        ):
+            return
+
+        if message.guild:
+            guild_name = str(message.guild)
+        else:
+            guild_name = str(message.channel)
+
+        embed = discord.Embed(
+            type="rich", title=action, color=0xFF0000, timestamp=datetime.now()
+        )
+
+        if message.content:
+            embed.add_field(name="Content", value=message.content, inline=False)
+
+        if message.guild and message.guild.icon:
+            embed.set_thumbnail(url=message.guild.icon.url)
+
+        embed.set_footer(
+            text=f"{str(message.author).strip('#0')} in {guild_name}",
+            icon_url=message.author.avatar,
+        )
+
+        embed.add_field(name="Jump URL", value=message.jump_url, inline=False)
+        embed.add_field(
+            name="Created At",
+            value=f"<t:{int(message.created_at.timestamp())}>",
+            inline=False,
+        )
+
+        webhook = discord.SyncWebhook.from_url(os.environ["LOGGER_WEBHOOK_URL"])
+        webhook.send(embeds=[embed], files=message.attachments)
 
     @commands.Cog.listener()
     async def on_message_delete(self, message):
@@ -230,27 +267,34 @@ Password: {identity["login"]["password"]}
             new_attachments = []
 
             for attachment in message.attachments:
-                response = requests.get(attachment.url)
+                file_object = await attachment.to_file()
+                new_attachments.append(file_object)
 
-                if response.status_code == 200:
-                    img = response.content
-
-                    with io.BytesIO(img) as file:
-                        new_attachments.append(discord.File(file, "1.png"))
-            
             message.attachments = new_attachments
 
         self.snipe_cache[message.channel.id] = message
-    
-    @commands.command()
+
+        await self.log_message(message, action="Message Deleted")
+
+    @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+        await self.log_message(before, action="Message Edited")
+
+    @commands.command(
+        brief="Get the last deleted message in the current channel.", alias=["s"]
+    )
     async def snipe(self, ctx):
         latest_snipe = self.snipe_cache.get(ctx.channel.id)
-        
+
         if latest_snipe:
-            await ctx.message.edit(attachments=latest_snipe.attachments, content=f"**{str(latest_snipe.author).strip('#0')}**:\n{latest_snipe.content}")
+            await ctx.message.edit(
+                attachments=latest_snipe.attachments,
+                content=f"**{str(latest_snipe.author).strip('#0')}**:\n{latest_snipe.content}",
+            )
 
         else:
             await ctx.message.delete()
+
 
 async def setup(client):
     await client.add_cog(Utility(client))
