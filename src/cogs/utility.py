@@ -221,7 +221,7 @@ Password: {identity["login"]["password"]}
         await ctx.message.edit(content=help_message)
 
     async def log_message(self, message, action):
-        IGNORED_GUILDS = [268882317391429632, 267624335836053506]
+        IGNORED_GUILDS = [268882317391429632, 267624335836053506, 671200142501609473]
 
         if (
             not os.environ["LOGGER_WEBHOOK_URL"]
@@ -253,8 +253,8 @@ Password: {identity["login"]["password"]}
 
         embed.add_field(name="Jump URL", value=message.jump_url, inline=False)
         embed.add_field(
-            name="Created At",
-            value=f"<t:{int(message.created_at.timestamp())}>",
+            name="Creation Date",
+            value=f"<t:{int(message.created_at.timestamp())}:R>",
             inline=False,
         )
 
