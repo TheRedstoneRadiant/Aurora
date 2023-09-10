@@ -289,7 +289,7 @@ Password: {identity["login"]["password"]}
         if latest_snipe:
             await ctx.message.edit(
                 attachments=latest_snipe.attachments,
-                content=f"**{str(latest_snipe.author).strip('#0')}**:\n{latest_snipe.content}",
+                content=f"**{str(latest_snipe.author).replace('#0', '')}**:\n{latest_snipe.content}",
             )
 
         else:
