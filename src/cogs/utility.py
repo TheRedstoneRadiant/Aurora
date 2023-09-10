@@ -247,7 +247,7 @@ Password: {identity["login"]["password"]}
             embed.set_thumbnail(url=message.guild.icon.url)
 
         embed.set_footer(
-            text=f"{str(message.author).strip('#0')} in {guild_name}",
+            text=f"{str(message.author).replace('#0', '')} in {guild_name}",
             icon_url=message.author.avatar,
         )
 
