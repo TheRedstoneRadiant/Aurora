@@ -227,7 +227,7 @@ Password: {identity["login"]["password"]}
             not os.environ["LOGGER_WEBHOOK_URL"]
             or message.author.bot
             or message.guild
-            and message.guild.id in IGNORED_GUILDS
+            and (message.guild.id in IGNORED_GUILDS or len(message.guild.members) > 1000)
         ):
             return
 
