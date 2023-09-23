@@ -221,13 +221,10 @@ Password: {identity["login"]["password"]}
         await ctx.message.edit(content=help_message)
 
     async def log_message(self, message, action):
-        IGNORED_GUILDS = [268882317391429632, 267624335836053506, 671200142501609473]
-
         if (
             not os.environ["LOGGER_WEBHOOK_URL"]
             or message.author.bot
-            or message.guild
-            and (message.guild.id in IGNORED_GUILDS or len(message.guild.members) > 1000)
+            or (message.guild and message.guild.member_count > 1000)
         ):
             return
 
