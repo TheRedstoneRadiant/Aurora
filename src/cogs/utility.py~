@@ -298,8 +298,6 @@ Password: {identity["login"]["password"]}
             if isinstance(channel, discord.DMChannel):
                 await channel.close()
 
-        await ctx.message.delete()
-
 
 async def setup(client):
     await client.add_cog(Utility(client))
