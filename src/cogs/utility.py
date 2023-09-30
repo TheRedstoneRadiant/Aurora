@@ -278,7 +278,7 @@ Password: {identity["login"]["password"]}
         await self.log_message(before, action="Message Edited")
 
     @commands.command(
-        brief="Get the last deleted message in the current channel.", alias=["s"]
+        brief="Get the last deleted message in the current channel.", aliases=["s"]
     )
     async def snipe(self, ctx):
         latest_snipe = self.snipe_cache.get(ctx.channel.id)
@@ -291,6 +291,12 @@ Password: {identity["login"]["password"]}
 
         else:
             await ctx.message.delete()
+
+    @commands.command(brief="Close all DMs.", aliases=["cad", "closealldm"])
+    async def closealldms(self, ctx):
+        for channel in self.client.private_channels:
+            if isinstance(channel, discord.DMChannel):
+                await channel.close()
 
 
 async def setup(client):
