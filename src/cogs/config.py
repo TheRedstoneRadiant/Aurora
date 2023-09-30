@@ -36,13 +36,15 @@ class Config(commands.Cog):
         status = status.lower()
 
         # Handle "invis" or "invisible" as "offline"
-        if status == "invis" or status == "invisible":
+        if status in ("invis", "offline"):
             status = "invisible"
 
         if status not in STATUS_OPTIONS:
             return await ctx.send(
                 f"Valid options: {', '.join(option.capitalize() for option in STATUS_OPTIONS)}"
             )
+
+        await self.client.change_presence(status=getattr(discord.Status, status))
 
     @commands.command(
         brief="Change the bot prefix. You can set a custom prefix alongside ',' (default)."
@@ -63,7 +65,7 @@ class Config(commands.Cog):
         # Update prefix
         self.client.prefix_latest = prefix
 
-        await ctx.send(f'Prefix updated. Your prefix is now "{prefix}".')
+        await ctx.message.edit(content=f'Prefix updated. Your prefix is now "{prefix}".')
 
 
 def update_config(payload: dict):
