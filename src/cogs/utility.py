@@ -222,7 +222,7 @@ Password: {identity["login"]["password"]}
 
     async def log_message(self, message, action):
         if (
-            not os.environ["LOGGER_WEBHOOK_URL"]
+            not os.environ.get("LOGGER_WEBHOOK_URL")
             or message.author.bot
             or (message.guild and message.guild.member_count > 1000)
         ):

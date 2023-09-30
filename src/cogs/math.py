@@ -8,6 +8,23 @@ from discord.ext import commands
 class Math(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.LATEX_API_URL = "https://rtex.probablyaweb.site/api/v2"
+        self.LATEX_TEMPLATE = r"""
+\documentclass{article}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{bm}  % nice bold symbols for matrices and vectors
+\usepackage{bbm}  % bold and calligraphic numbers
+\usepackage[binary-units=true]{siunitx}  % SI unit handling
+\usepackage{tikz}  % from here on, to make nice diagrams with tikz
+\usepackage{ifthen}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shapes, arrows, chains, fit, positioning, calc, decorations.pathreplacing}
+\color{white}      % Set the default text color to white
+
+\begin{document}
+    \pagenumbering{gobble}
+    $text
+\end{document}"""
 
     @commands.command(
         aliases=["w"],
@@ -15,19 +32,19 @@ class Math(commands.Cog):
     )
     async def latex(self, ctx, *, latex):
         response = requests.post(
-            "http://latex2png.com/api/convert",
-            data=json.dumps(
-                {
-                    "auth": {"user": "guest", "password": "guest"},
-                    "latex": latex,
-                    "resolution": 300,
-                    "color": "ffffff",
-                }
-            ),
+            self.LATEX_API_URL,
+            data={
+                "code": self.LATEX_TEMPLATE.replace("$text", latex),
+                "format": "png",
+            },
         )
+        print(response.text)
 
-        response = requests.get("http://latex2png.com" + response.json().get("url"))
+        filename = response.json().get("filename")
+        if not filename:
+            response.status_code = 500
 
+        response = requests.get(f"{self.LATEX_API_URL}/{filename}")
         if response.status_code == 200:
             img = response.content
 
