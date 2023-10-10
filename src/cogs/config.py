@@ -45,6 +45,7 @@ class Config(commands.Cog):
             )
 
         await self.client.change_presence(status=getattr(discord.Status, status))
+        await ctx.message.delete()
 
     @commands.command(
         brief="Change the bot prefix. You can set a custom prefix alongside ',' (default)."
