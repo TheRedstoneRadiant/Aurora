@@ -31,7 +31,7 @@ class Config(commands.Cog):
             status (str): The desired status.
 
         Example:
-            !status online
+            ,status online
         """
         status = status.lower()
 
@@ -40,8 +40,8 @@ class Config(commands.Cog):
             status = "invisible"
 
         if status not in STATUS_OPTIONS:
-            return await ctx.send(
-                f"Valid options: {', '.join(option.capitalize() for option in STATUS_OPTIONS)}"
+            return await ctx.message.edit(
+                content=f"Valid options: {', '.join(option.capitalize() for option in STATUS_OPTIONS)}"
             )
 
         await self.client.change_presence(status=getattr(discord.Status, status))
