@@ -66,7 +66,9 @@ class Config(commands.Cog):
         # Update prefix
         self.client.prefix_latest = prefix
 
-        await ctx.message.edit(content=f'Prefix updated. Your prefix is now "{prefix}".')
+        await ctx.message.edit(
+            content=f'Prefix updated. Your prefix is now "{prefix}".'
+        )
 
 
 def update_config(payload: dict):
