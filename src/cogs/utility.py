@@ -39,7 +39,11 @@ class Utility(commands.Cog):
                     return
 
                 if msg.author == self.client.user:
-                    await msg.delete()
+                    try:
+                        await msg.delete()
+                    except:
+                        continue
+
                     counter += 1
 
     @commands.command(brief="Same as ,purge but for every user (needs manage messages)")
