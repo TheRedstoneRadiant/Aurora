@@ -56,9 +56,12 @@ async def on_ready():
 
 @client.event
 async def on_command_error(ctx, error):
-    await ctx.message.edit(content=f"An error occured: {str(error)}")
     print(f"An error occured: {str(error)}")  # Log Error
-    raise error
+
+    try:
+        await ctx.message.edit(content=f"An error occured: {str(error)}")
+    except:
+        pass
 
 
 @client.command(aliases=["r", "reload"])
