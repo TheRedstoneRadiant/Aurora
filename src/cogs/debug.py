@@ -36,7 +36,7 @@ class Debug(commands.Cog):
     )
     async def exit(self, ctx):
         await ctx.message.add_reaction("👍")
-        os.system("kill 1")
+        await self.client.close()
 
     @commands.command(brief="Clears all of your messages in a server :trollface:")
     async def guildclear(self, ctx, user_id=None):
