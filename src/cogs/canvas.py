@@ -8,13 +8,15 @@ class Canvas(commands.Cog):
     def __init__(self, client):
         self.client = client
         self.canvas_token = os.environ["CANVAS_TOKEN"]
+        self.canvas_url = os.getenv("CANVAS_URL", "canvas.instructure.com")
 
     def perform_request(self, endpoint):
-        print(f"GET https://canvas.instructure.com/api/v1/{endpoint}")
-        return requests.get(
-            f"https://canvas.instructure.com/api/v1/{endpoint}",
+        print(f"GET https://{self.canvas_url}/api/v1/{endpoint}")
+        r = requests.get(
+            f"https://{self.canvas_url}/api/v1/{endpoint}",
             headers={"Authorization": f"Bearer {self.canvas_token}"},
-        ).json()
+        )
+        return r.json()
 
     @commands.command(
         brief="Fetches and displays information about user from the Canvas API"
