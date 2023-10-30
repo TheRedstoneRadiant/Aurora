@@ -79,7 +79,7 @@ class Canvas(commands.Cog):
 
         content = f"{len(todo_assignments)} assignments remaining.\n"
         for course in courses:
-            content += f"\n**{courses[course][0]['context_name']}**:\n"
+            content += f"\n**{courses[course][0]['context_name']}**\n"
             for item in courses[course]:
                 content += f'{item["assignment"]["name"]} due <t:{int(datetime.strptime(item["assignment"]["due_at"], "%Y-%m-%dT%H:%M:%SZ").timestamp())}:R>\n'
 
