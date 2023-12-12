@@ -170,6 +170,9 @@ class Meme(commands.Cog):
     async def reddit(self, ctx: commands.Context, subreddit: str):
         fetched_post = requests.get(
             f"https://meme-api.com/gimme/{subreddit}").json()
+        if fetched_post.get("message"):
+            return await ctx.message.edit(content=fetched_post["message"])
+
         await self.send_random_image(
             ctx=ctx,
             url=fetched_post["url"],
