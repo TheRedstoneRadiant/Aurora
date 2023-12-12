@@ -163,7 +163,18 @@ class Meme(commands.Cog):
             ctx=ctx,
             url=fetched_meme["url"],
             filename="meme.png",
-            content=f'**{fetched_meme["title"]}**\n[Post Link]({fetched_meme["postLink"]})',
+            content=f'[Post Link](<{fetched_meme["postLink"]}>)\n**{fetched_meme["title"]}**',
+        )
+
+    @commands.command(brief="Fetch a random image from any subreddit")
+    async def reddit(self, ctx: commands.Context, subreddit: str):
+        fetched_post = requests.get(
+            f"https://meme-api.com/gimme/{subreddit}").json()
+        await self.send_random_image(
+            ctx=ctx,
+            url=fetched_post["url"],
+            filename="meme.png",
+            content=f'[Post Link](<{fetched_post["postLink"]}>)\n**{fetched_post["title"]}**',
         )
 
 
