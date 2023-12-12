@@ -19,6 +19,7 @@ cogs = [
     "cogs.config",
     "cogs.math",
     "cogs.nuke",
+    "cogs.ai",
 ]
 
 if "CANVAS_TOKEN" in os.environ:
