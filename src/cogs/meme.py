@@ -18,8 +18,7 @@ class Meme(commands.Cog):
         self.api_url = "https://api.github.com/repos/cat-milk/Anime-Girls-Holding-Programming-Books/contents"
         self.xkcd_url = "https://xkcd.com/info.0.json"
         self.cute_cat_url = "https://cataas.com/cat/cute"
-        self.random_user_agent = str(
-            random.randint(1, 9)) * random.randint(10, 90)
+        self.random_user_agent = str(random.randint(1, 9)) * random.randint(10, 90)
 
     async def edit_message_with_image(
         self,
@@ -101,8 +100,7 @@ class Meme(commands.Cog):
         language_folder = random.choice(folders)
 
         # Fetching images in the chosen folder
-        language_images = requests.get(
-            f"{self.api_url}/{language_folder}").json()
+        language_images = requests.get(f"{self.api_url}/{language_folder}").json()
 
         # Choosing a random image from the images
         image = random.choice(language_images)
@@ -158,19 +156,12 @@ class Meme(commands.Cog):
 
     @commands.command(brief="Random meme from r/memes")
     async def meme(self, ctx: commands.Context):
-        json = requests.get(
-            "https://www.reddit.com/r/memes.json",
-            headers={"User-Agent": self.random_user_agent},
-        ).json()
-        if "data" not in json or "children" not in json["data"]:
-            await ctx.message.edit("Failed to fetch memes from r/memes.")
-
-        meme = random.choice(json["data"]["children"])
-        if meme["media"]:
-            return self.meme(ctx)
-
+        fetched_meme = requests.get("https://meme-api.com/gimme/memes")
         await self.send_random_image(
-            ctx=ctx, url=meme["data"]["url"], filename="meme.png"
+            ctx=ctx,
+            url=fetched_meme["url"],
+            filename="meme.png",
+            content=f'**{fetched_meme["title"]}**\n[Post Link]({fetched_meme["postLink"]})',
         )
 
 
