@@ -99,7 +99,8 @@ class Meme(commands.Cog):
         language_folder = random.choice(folders)
 
         # Fetching images in the chosen folder
-        language_images = requests.get(f"{self.api_url}/{language_folder}").json()
+        language_images = requests.get(
+            f"{self.api_url}/{language_folder}").json()
 
         # Choosing a random image from the images
         image = random.choice(language_images)
@@ -152,6 +153,10 @@ class Meme(commands.Cog):
         await self.send_random_image(
             ctx=ctx, url=self.cute_cat_url, filename="cute_cat.png", content=""
         )
+
+    @commands.command(brief="richard", aliases=['richard'])
+    async def dick(self, ctx: commands.Context):
+        await ctx.message.edit(content="https://upload.wikimedia.org/wikipedia/commons/5/58/Richard_I_of_England.png")
 
 
 async def setup(client: commands.Bot):
