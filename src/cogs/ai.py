@@ -41,13 +41,14 @@ class AI(commands.Cog):
                 content=f"An error occurred during image generation: {str(e)}"
             )
 
-    @commands.command(aliases=["gpt", "ask"])
+    @commands.command(brief="Ask GPT4 a question!", aliases=["gpt", "ask"])
     async def gpt4(self, ctx: commands.Context, *, prompt: str):
         await ctx.message.edit(content=f"**🤔 Thinking...**\n**`{prompt}`**")
 
         try:
             response = await self.make_api_request(
-                f"{self.api_url}/gpti", {"prompt": prompt, "type": "json", "model": "1"}
+                f"{self.api_url}/gpti", {"prompt": prompt,
+                                         "type": "json", "model": "1"}
             )
             if response.get("code") == 200:
                 await ctx.message.edit(content=f"**`{prompt}`**\n{response['gpt']}")
