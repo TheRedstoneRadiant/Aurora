@@ -10,21 +10,21 @@ class AI(commands.Cog):
         self.client = client
         self.api_url = "https://gpti.projectsrpp.repl.co/api"
 
-    async def fetch_image(self, prompt):
+    async def make_api_request(self, request_url, json):
         async with aiohttp.ClientSession() as session:
-            async with session.post(
-                f"{self.api_url}/dalleai", json={"prompt": prompt, "type": "json"}
-            ) as response:
+            async with session.post(url=request_url, json=json) as response:
                 return await response.json()
 
-    @commands.command(brief="Generates an AI image using DALL-E")
+    @commands.command(brief="Generates an AI image using DALL-E", aliases=["img"])
     async def dalle(self, ctx: commands.Context, *, prompt: str):
         await ctx.message.edit(
             content=f"**Generating image via DALL-E...**\n**`{prompt}`**"
         )
 
         try:
-            image = await self.fetch_image(prompt)
+            image = await self.make_api_request(
+                f"{self.api_url}/dalleai", {"prompt": prompt, "type": "json"}
+            )
             if image.get("code") == 200:
                 await self.client.cogs["Meme"].send_random_image(
                     ctx=ctx,
@@ -35,6 +35,25 @@ class AI(commands.Cog):
             else:
                 await ctx.message.edit(
                     content=f"{image['code']} error during generation: '{image['message']}'"
+                )
+        except Exception as e:
+            await ctx.message.edit(
+                content=f"An error occurred during image generation: {str(e)}"
+            )
+
+    @commands.command(aliases=["gpt", "ask"])
+    async def gpt4(self, ctx: commands.Context, *, prompt: str):
+        await ctx.message.edit(content=f"**🤔 Thinking...**\n**`{prompt}`**")
+
+        try:
+            response = await self.make_api_request(
+                f"{self.api_url}/gpti", {"prompt": prompt, "type": "json", "model": "1"}
+            )
+            if response.get("code") == 200:
+                await ctx.message.edit(content=f"**`{prompt}`**\n{response['gpt']}")
+            else:
+                await ctx.message.edit(
+                    content=f"{response['code']} error during generation: '{response['message']}'"
                 )
         except Exception as e:
             await ctx.message.edit(
