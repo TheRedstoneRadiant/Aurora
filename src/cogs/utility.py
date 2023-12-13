@@ -145,8 +145,7 @@ class Utility(commands.Cog):
 
         identity = requests.get(url).json()["results"][0]
         date_of_birth = int(
-            datetime.fromisoformat(
-                identity["dob"]["date"].rstrip("Z")).timestamp()
+            datetime.fromisoformat(identity["dob"]["date"].rstrip("Z")).timestamp()
         )
 
         return await ctx.message.edit(
@@ -188,7 +187,7 @@ Password: {identity["login"]["password"]}
             attachments_content = []
             for attachment in ctx.message.attachments:
                 file_content = str(await attachment.read())[2:-1].replace("\\n", "\n")
-                filename_header = f'==== {attachment.filename} ====\n'
+                filename_header = f"==== {attachment.filename} ====\n"
                 attachments_content.append(
                     f"{filename_header if ATTACH_FILE_HEADER else ''}{file_content}"
                 )
@@ -196,8 +195,7 @@ Password: {identity["login"]["password"]}
             text = "\n\n".join(attachments_content)
 
         url = "https://paste.fyi/?redirect"
-        data = {"paste": text, "highlight": "",
-                "expire": 999, "multiplier": 2592000}
+        data = {"paste": text, "highlight": "", "expire": 999, "multiplier": 2592000}
 
         with requests.post(url, data=data) as response:
             if response.status_code == 200:
@@ -251,8 +249,7 @@ Password: {identity["login"]["password"]}
         )
 
         if message.content:
-            embed.add_field(
-                name="Content", value=message.content, inline=False)
+            embed.add_field(name="Content", value=message.content, inline=False)
 
         if message.guild and message.guild.icon:
             embed.set_thumbnail(url=message.guild.icon.url)
@@ -269,8 +266,7 @@ Password: {identity["login"]["password"]}
             inline=False,
         )
 
-        webhook = discord.SyncWebhook.from_url(
-            os.environ["LOGGER_WEBHOOK_URL"])
+        webhook = discord.SyncWebhook.from_url(os.environ["LOGGER_WEBHOOK_URL"])
         webhook.send(embeds=[embed], files=message.attachments)
 
     @commands.Cog.listener()
