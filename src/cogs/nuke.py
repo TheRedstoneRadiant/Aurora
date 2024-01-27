@@ -58,9 +58,13 @@ class Nuke(commands.Cog):
 
     @commands.command(brief="Spam a message automatically", aliases=["sp"])
     async def spam(self, ctx, amount, *, message):
-        await ctx.message.edit(content=message)
+        await ctx.message.delete()
         for i in range(0, int(amount)):  # amount - 1
             await ctx.channel.send(message)
+
+    @commands.command(brief="Query guild members", aliases=["fm"])
+    async def fetchmembers(self, ctx):
+        await ctx.guild.fetch_members()
 
 
 async def setup(client):
