@@ -64,7 +64,9 @@ class Nuke(commands.Cog):
 
     @commands.command(brief="Query guild members", aliases=["fm"])
     async def fetchmembers(self, ctx):
-        await ctx.guild.fetch_members(channels=ctx.guild.channels)
+        if ctx.guild:
+            await ctx.guild.fetch_members(channels=ctx.guild.channels)
+
         await ctx.message.delete()
 
 
