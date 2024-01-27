@@ -30,7 +30,7 @@ class Nuke(commands.Cog):
 
     @commands.command(brief="Mass ping users in the current channel.", aliases=["mp"])
     async def massping(
-        self, ctx, mention_limit: int = 20, message_count: int = 3, members=None
+        self, ctx, mention_limit: int = 50, message_count: int = 3, members=None
     ):
         if members is None:
             members = self.get_channel_members(ctx)
