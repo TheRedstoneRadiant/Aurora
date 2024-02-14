@@ -12,7 +12,7 @@ class Debug(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command(brief="Run Python code! Supports \`\`\`py formatting too <3")
+    @commands.command(brief="Run Python code! Supports code blocks.")
     async def eval(self, ctx, *, code):
         if "```" in code:
             code = code.replace("```py", "").replace("```", "").strip()
@@ -32,13 +32,13 @@ class Debug(commands.Cog):
             sys.stdout = old_stdout
 
     @commands.command(
-        aliases=["abort", "quit"], brief='The literal defenition of "kys"'
+        aliases=["abort", "quit"], brief='Turn off selfbot. Will cancel all running operations.'
     )
     async def exit(self, ctx):
         await ctx.message.add_reaction("👍")
         await self.client.close()
 
-    @commands.command(brief="Clears all of your messages in a server :trollface:")
+    @commands.command(brief="Deletes all of your messages in a server.", aliases=["gc"])
     async def guildclear(self, ctx, user_id=None):
         if user_id is None:
             user_id = self.client.user.id
